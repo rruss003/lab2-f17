@@ -52,7 +52,7 @@ if(index > -1){
   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   cprintf("after mappages\n");
   shm_table.shm_pages[index].refcnt++;
-  p->sz += PGSIZE;
+//   p->sz += PGSIZE;
 }
 else{
   // Case 2
@@ -64,7 +64,7 @@ else{
       shm_table.shm_pages[i].frame = kalloc();
       shm_table.shm_pages[i].refcnt = 1;
       mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
-      p->sz += PGSIZE;
+//       p->sz += PGSIZE;
       break;
     }
   }
