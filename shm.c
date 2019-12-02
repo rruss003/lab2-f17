@@ -45,20 +45,19 @@ for (i=0; i<64; i++){
 struct proc* p = myproc();
 if(index){
   // Case 1
-  mappages(p->pgdir, PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
+  mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   shm_table.shm_pages[index].refcnt++;
   p->sz += PGSIZE;
 }
 else{
   // Case 2
-  int empty = -1;
   for(i = 0; i<64; i++){
     if(shm_table.shm_pages[i].id == 0){
       shm_table.shm_pages[i].id = id;
       shm_table.shm_pages[i].frame = kalloc();
       shm_table.shm_pages[i].frame = kalloc();
       shm_table.shm_pages[i].refcnt = 1;
-      mappages(p->pgdir, PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
+      mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
       break;
     }
   }
