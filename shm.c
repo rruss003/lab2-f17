@@ -81,11 +81,21 @@ return 0; //added to remove compiler warning -- you should decide what to return
 
 
 int shm_close(int id) {
-cprintf("SHM_CLOSE\n");
-//you write this too!
-
-
-
+int i=0;
+initlock(&(shm_table.lock), "SHM lock");
+acquire(&(shm_table.lock));
+cprintf("before loop\n");
+for (i=0; i<64; i++){
+  if(shm_table.shm_pages[i].id == id){
+    shm_table.shm_pages[i].refcnt--;
+    if(shm_table.shm_pages[i].refcnt == 0){
+      shm_table.shm_pages[i].id =0;
+      shm_table.shm_pages[i].frame =0;
+    }
+    break;
+  }
+}
+release(&(shm_table.lock));
 
 return 0; //added to remove compiler warning -- you should decide what to return
 }
