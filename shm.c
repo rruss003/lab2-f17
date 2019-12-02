@@ -45,7 +45,7 @@ for (i=0; i<64; i++){
   }
 }
 struct proc* p = myproc();
-if(index){
+if(index > -1){
   cprintf("CASE1\n");
   cprintf("indx: %d, id: %d\n", index, id);
   // Case 1
