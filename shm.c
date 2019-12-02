@@ -47,7 +47,7 @@ if(index > -1){
   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   shm_table.shm_pages[index].refcnt++;
   *pointer=(char *)PGROUNDUP(p->sz);
-//   p->sz += PGSIZE;
+  p->sz += PGSIZE;
 }
 else{
   // Case 2
