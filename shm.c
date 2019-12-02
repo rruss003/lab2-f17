@@ -75,7 +75,6 @@ int shm_close(int id) {
 int i=0;
 initlock(&(shm_table.lock), "SHM lock");
 acquire(&(shm_table.lock));
-cprintf("before loop\n");
 for (i=0; i<64; i++){
   if(shm_table.shm_pages[i].id == id){
     shm_table.shm_pages[i].refcnt--;
