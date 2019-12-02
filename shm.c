@@ -72,7 +72,7 @@ else{
 *pointer=(char *)PGROUNDUP(p->sz);
   
 release(&(shm_table.lock));
-
+cprintf("returned\n");
 return 0; //added to remove compiler warning -- you should decide what to return
 }
 
