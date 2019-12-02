@@ -27,7 +27,7 @@ shm_open(1,(char **)&counter);
     {
      printf(1,"TEST1\n"); 
      uacquire(&(counter->lock));
-     (&counter)->cnt++;
+     counter->cnt++;
      urelease(&(counter->lock));
      printf(1,"TEST2\n");
 
