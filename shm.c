@@ -47,7 +47,7 @@ if(index > -1){
   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   shm_table.shm_pages[index].refcnt++;
   *pointer=(char *)PGROUNDUP(p->sz);
-  p->sz += PGSIZE;
+//   p->sz += PGSIZE;
 }
 else{
   // Case 2
@@ -56,10 +56,10 @@ else{
       shm_table.shm_pages[i].id = id;
       shm_table.shm_pages[i].frame = kalloc();
       shm_table.shm_pages[i].refcnt = 1;
-//       memset(shm_table.shm_pages[i].frame, 0, PGSIZE);
+      memset(shm_table.shm_pages[i].frame, 0, PGSIZE);
       mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
       *pointer=(char *)PGROUNDUP(p->sz);
-      p->sz += PGSIZE;
+//       p->sz += PGSIZE;
       break;
     }
   }
