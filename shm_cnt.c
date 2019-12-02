@@ -25,11 +25,9 @@ shm_open(1,(char **)&counter);
  printf(1,"%s returned successfully from shm_open with counter %x\n", pid? "Child": "Parent", counter); 
   for(i = 0; i < 10000; i++)
     {
-     printf(1,"TEST1\n"); 
      uacquire(&(counter->lock));
      counter->cnt++;
      urelease(&(counter->lock));
-     printf(1,"TEST2\n");
 
 //print something because we are curious and to give a chance to switch process
      if(i%1000 == 0)
