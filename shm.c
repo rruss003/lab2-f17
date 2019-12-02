@@ -34,7 +34,6 @@ int shm_open(int id, char **pointer) {
 //Look through the shm_table to see if the id we are opening already exists
 int i = 0;
 int index = -1;
-initlock(&(shm_table.lock), "SHM lock");
 acquire(&(shm_table.lock));
 for (i=0; i<64; i++){
   if(shm_table.shm_pages[i].id == id){
@@ -73,7 +72,6 @@ return 0; //added to remove compiler warning -- you should decide what to return
 
 int shm_close(int id) {
 int i=0;
-initlock(&(shm_table.lock), "SHM lock");
 acquire(&(shm_table.lock));
 for (i=0; i<64; i++){
   if(shm_table.shm_pages[i].id == id){
