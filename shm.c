@@ -51,6 +51,7 @@ if(index > -1){
       cprintf("CASE1 sz: %d\n",p->sz);
   // Case 1
   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
+      cprintf("CASE1-2 sz: %d\n",p->sz);
   cprintf("after mappages\n");
   shm_table.shm_pages[index].refcnt++;
 *pointer=(char *)PGROUNDUP(p->sz);
@@ -67,6 +68,7 @@ else{
       shm_table.shm_pages[i].refcnt = 1;
       cprintf("CASE2 sz: %d\n",p->sz);
       mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
+      cprintf("CASE2-2 sz: %d\n",p->sz);
 *pointer=(char *)PGROUNDUP(p->sz);
     p->sz = PGROUNDUP(p->sz)+PGSIZE;
 //       p->sz += PGSIZE;
