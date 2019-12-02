@@ -64,6 +64,7 @@ else{
       shm_table.shm_pages[i].frame = kalloc();
       shm_table.shm_pages[i].refcnt = 1;
       mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
+  p->sz = PGROUNDUP(p->sz)+PGSIZE;
 //       p->sz += PGSIZE;
       break;
     }
