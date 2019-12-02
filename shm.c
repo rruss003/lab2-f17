@@ -48,6 +48,8 @@ if(index > -1){
   shm_table.shm_pages[index].refcnt++;
   *pointer=(char *)PGROUNDUP(p->sz);
   p->sz += PGSIZE;
+  release(&(shm_table.lock));
+return 0;
 }
 else{
   // Case 2
@@ -59,7 +61,9 @@ else{
       memset(shm_table.shm_pages[i].frame, 0, PGSIZE);
       mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
       *pointer=(char *)PGROUNDUP(p->sz);
-//       p->sz += PGSIZE;
+      p->sz += PGSIZE;
+      release(&(shm_table.lock));
+return 0;
       break;
     }
   }
