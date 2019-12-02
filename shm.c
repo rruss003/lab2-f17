@@ -47,6 +47,7 @@ for (i=0; i<64; i++){
 struct proc* p = myproc();
 if(index){
   cprintf("CASE1\n");
+  cprintf("indx: %d, id: %d\n", index, id);
   // Case 1
   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   shm_table.shm_pages[index].refcnt++;
