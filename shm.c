@@ -52,7 +52,7 @@ if(index > -1){
   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   cprintf("after mappages\n");
   shm_table.shm_pages[index].refcnt++;
-  **pointer=(char *)PGROUNDUP(p->sz);
+  *pointer=(char *)PGROUNDUP(p->sz);
   p->sz = PGROUNDUP(p->sz)+PGSIZE;
 }
 else{
@@ -65,7 +65,7 @@ else{
       shm_table.shm_pages[i].frame = kalloc();
       shm_table.shm_pages[i].refcnt = 1;
       mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
-      **pointer=(char *)PGROUNDUP(p->sz);
+      *pointer=(char *)PGROUNDUP(p->sz);
       cprintf("CASE2-3 sz: %d\n",pointer);
       p->sz = PGROUNDUP(p->sz)+PGSIZE;
 //       p->sz += PGSIZE;
