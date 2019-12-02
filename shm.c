@@ -48,6 +48,7 @@ struct proc* p = myproc();
 if(index > -1){
   cprintf("CASE1\n");
   cprintf("indx: %d, id: %d\n", index, id);
+      cprintf("CASE1 sz: %d\n",p->sz);
   // Case 1
   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   cprintf("after mappages\n");
@@ -64,6 +65,7 @@ else{
       cprintf("BEFORE KALLOC\n");
       shm_table.shm_pages[i].frame = kalloc();
       shm_table.shm_pages[i].refcnt = 1;
+      cprintf("CASE2 sz: %d\n",p->sz);
       mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
 *pointer=(char *)PGROUNDUP(p->sz);
     p->sz = PGROUNDUP(p->sz)+PGSIZE;
