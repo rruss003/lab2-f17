@@ -29,7 +29,7 @@ shm_open(1,(char **)&counter);
      uacquire(&(counter->lock));
      counter->cnt++;
      urelease(&(counter->lock));
-     printf(1,"TEST2\n");2
+     printf(1,"TEST2\n");
 
 //print something because we are curious and to give a chance to switch process
      if(i%1000 == 0)
