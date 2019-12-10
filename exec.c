@@ -62,6 +62,7 @@ exec(char *path, char **argv)
 
   // Allocate two pages at the next page boundary.
   // Make the first inaccessible.  Use the second as the user stack.
+  cprintf("test Allocate two pages at the next page boundary\n");
   sz = PGROUNDUP(sz);
   if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)
     goto bad;
@@ -101,6 +102,7 @@ exec(char *path, char **argv)
   curproc->tf->esp = sp;
   switchuvm(curproc);
   freevm(oldpgdir);
+  cprintf("test commit to the user image\n");
   return 0;
 
  bad:
