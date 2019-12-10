@@ -88,79 +88,71 @@ void shminit() {
 
 // return 0; //added to remove compiler warning -- you should decide what to return
 // }
-int shm_open(int id, char **pointer) {
-  uint size = myproc()->sz;
-  int i;
-  if(id <= 0){//invalid ID
-    return -1;
-  }
+int shm_open(int id, char **pointer)
+{
+  //pte_t* pte;
+  int pos=0;
+  void* v;
+  int i=0;
   acquire(&(shm_table.lock));
-    for(i=0;i<64;i++){ //look for ID
-      if(id == shm_table.shm_pages[i].id){
-        if(shm_table.shm_pages[i].refcnt <= 0 || shm_table.shm_pages[i].frame == 0){
-          release(&(shm_table.lock));
-          return -1;
-        }
-        //ELSE MAP page
-        if(mappages(myproc()->pgdir,(char*)PGROUNDUP(size),PGSIZE,V2P(shm_table.shm_pages[i].frame),(PTE_W|PTE_U))==-1){
-          release(&(shm_table.lock));
-          return -1;
-        }
-        //ELSE done successsfully
-        shm_table.shm_pages[i].refcnt++;
-        *pointer=(char*)size;
-        release(&(shm_table.lock));
-        return 0;
-      }
-    }
-    //ID is not FOUND
-    for(i=0;i<64;i++){
-    if(shm_table.shm_pages[i].id == 0){ //Unused page found
-      shm_table.shm_pages[i].frame = kalloc();
-      memset(shm_table.shm_pages[i].frame,0,PGSIZE);
-      if(mappages(myproc()->pgdir,(char*)PGROUNDUP(size),PGSIZE,V2P(shm_table.shm_pages[i].frame),(PTE_W|PTE_U))==-1){
-        release(&(shm_table.lock));
-        return -1;
-      }
-      //ELSE done successsfully
-      shm_table.shm_pages[i].id = id;
-      if(shm_table.shm_pages[i].refcnt != 0){
-        release(&(shm_table.lock));
-        return -1;
-      }
+  for (; i< 64; i++)
+  {
+    //CASE1 : IT ALREADY EXIST
+    if(shm_table.shm_pages[i].id==id)//S1: if it finds id in table
+    {
+      v = ((char*)PGROUNDUP(myproc()->sz));
+      mappages(myproc()->pgdir, v, PGSIZE, V2P(shm_table.shm_pages[i].frame), PTE_W|PTE_U);
       shm_table.shm_pages[i].refcnt++;
-      *pointer=(char*)size;
+      *pointer=v;
       release(&(shm_table.lock));
       return 0;
     }
   }
-  release(&(shm_table.lock));//NO free pages
-  return -1; //added to remove compiler warning -- you should decide what to return
-}
+//CASE 2:case it doesnt find the id in shm_table
+  //S1:find an empty entry in shm_table
 
-// CS 153 - Lab 4: addition of all code
-int shm_close(int id) {
-  if(id <= 0){
-    return -1;
-  }
-  int i;
-  acquire(&(shm_table.lock));
-  for(i=0;i<64;i++){ //Find page with ID
-    if(id == shm_table.shm_pages[i].id){
-      if(shm_table.shm_pages[i].refcnt == 0){//Error Just In Case
-        release(&(shm_table.lock));
-        return -1;
-      }
-      shm_table.shm_pages[i].refcnt--;
-      if(shm_table.shm_pages[i].refcnt == 0){ //if page is not being used anymore
-        shm_table.shm_pages[i].id =0;
-        shm_table.shm_pages[i].frame =0;
-      }
+   for(pos=0;pos<64;pos++)
+   {
+    if(shm_table.shm_pages[pos].id==0)
+    {
+
+      shm_table.shm_pages[pos].id=id; //initialize its id to the id passed in
+     //kmalloc a page and store its address in frame
+      shm_table.shm_pages[pos].frame = kalloc();
+      //lin: dont forget to call memset after kalloc
+      memset(shm_table.shm_pages[pos].frame , 0, PGSIZE);
+      //map pages,assuming here kalloc doesnt handle mapping need to Check
+      v=(char *) PGROUNDUP(myproc()->sz);
+      mappages(myproc()->pgdir, v, PGSIZE, V2P(shm_table.shm_pages[pos].frame), PTE_W|PTE_U);
+      *pointer=v;
+      myproc()->sz+= PGSIZE;
+      shm_table.shm_pages[pos].refcnt=1;
       release(&(shm_table.lock));
       return 0;
     }
-  }
-  //ID NOT FOUND
+
+   }
   release(&(shm_table.lock));
-  return -1; //added to remove compiler warning -- you should decide what to return
+  return 0;
+}
+int shm_close(int id)
+{
+   int i;
+  //you write this too!
+  acquire(&(shm_table.lock));
+  for (i = 0; i< 64; i++)
+  {
+    //CASE ID exist
+    if(shm_table.shm_pages[i].id==id)//if it finds id in table
+    {
+       shm_table.shm_pages[i].refcnt-=1;
+       if(shm_table.shm_pages[i].refcnt==0)//if no one else is using it
+        shm_table.shm_pages[i].id=0;
+       release(&(shm_table.lock));
+      return 0;
+    }
+  }
+  release(&(shm_table.lock));
+ // printf("it doesnt exist %s\n",id);
+ return 0; //added to remove compiler warning -- you should decide what to return
 }
