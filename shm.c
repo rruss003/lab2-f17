@@ -35,21 +35,21 @@ int shm_open(int id, char **pointer) {
 int i = 0;
 // int index = -1;
 acquire(&(shm_table.lock));
-// for (i=0; i<64; i++){
-//   if(shm_table.shm_pages[i].id == id){
-//     index = i;
-//     break;
-//   }
-// }
+for (i=0; i<64; i++){
+  if(shm_table.shm_pages[i].id == id){
+    index = i;
+    break;
+  }
+}
 struct proc* p = myproc();
-// if(index > -1){
+if(index > -1){
   // Case 1
 //   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
-//   shm_table.shm_pages[index].refcnt++;
-//   *pointer=(char *)PGROUNDUP(p->sz);
-//   p->sz += PGSIZE;
-// }
-// else{
+  shm_table.shm_pages[index].refcnt++;
+  *pointer=(char *)PGROUNDUP(p->sz);
+  p->sz += PGSIZE;
+}
+else{
   // Case 2
   for(i = 0; i<64; i++){
     if(shm_table.shm_pages[i].id == 0){
@@ -62,7 +62,7 @@ struct proc* p = myproc();
       p->sz += PGSIZE;
       break;
     }
-//   }
+  }
 }
   
 release(&(shm_table.lock));
