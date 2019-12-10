@@ -27,6 +27,7 @@ exec(char *path, char **argv)
     cprintf("exec: fail\n");
     return -1;
   }
+  cprintf("test 2\n");
   ilock(ip);
   pgdir = 0;
 
@@ -39,6 +40,7 @@ exec(char *path, char **argv)
   if((pgdir = setupkvm()) == 0)
     goto bad;
 
+  cprintf("test 4\n");
   // Load program into memory.
   sz = 0;
   for(i=0, off=elf.phoff; i<elf.phnum; i++, off+=sizeof(ph)){
@@ -107,6 +109,7 @@ exec(char *path, char **argv)
   return 0;
 
  bad:
+  cprintf("test bad\n");
   if(pgdir)
     freevm(pgdir);
   if(ip){
