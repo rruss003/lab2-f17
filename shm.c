@@ -33,14 +33,14 @@ int shm_open(int id, char **pointer) {
 // you write this
 // Look through the shm_table to see if the id we are opening already exists
 int i = 0;
-int index = -1;
+// int index = -1;
 acquire(&(shm_table.lock));
-for (i=0; i<64; i++){
-  if(shm_table.shm_pages[i].id == id){
-    index = i;
-    break;
-  }
-}
+// for (i=0; i<64; i++){
+//   if(shm_table.shm_pages[i].id == id){
+//     index = i;
+//     break;
+//   }
+// }
 struct proc* p = myproc();
 // if(index > -1){
   // Case 1
