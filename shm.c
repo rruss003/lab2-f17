@@ -44,7 +44,7 @@ for (i=0; i<64; i++){
 struct proc* p = myproc();
 if(index > -1){
   // Case 1
-//   mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
+  mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   shm_table.shm_pages[index].refcnt++;
   *pointer=(char *)PGROUNDUP(p->sz);
 //   p->sz += PGSIZE;
@@ -72,7 +72,7 @@ return 0; //added to remove compiler warning -- you should decide what to return
 
 int shm_close(int id) {
 int i=0;
-  initlock(&(shm_table.lock), "SHM lock");
+initlock(&(shm_table.lock), "SHM lock");
 acquire(&(shm_table.lock));
 for (i=0; i<64; i++){
   if(shm_table.shm_pages[i].id == id){
