@@ -31,10 +31,10 @@ shm_open(1,(char **)&counter);
 
      counter->cnt++;
      urelease(&(counter->lock));
-
-}
   if(i%1000 == 0)
        printf(1,"Counter in %s is %d at address %x\n",pid? "Parent" : "Child", counter->cnt, counter);
+
+}
   if(pid)
      {
        printf(1," Final Counter in parent is %d\n",counter->cnt);
