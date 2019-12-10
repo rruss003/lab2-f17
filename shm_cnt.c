@@ -27,14 +27,14 @@ shm_open(1,(char **)&counter);
     {
      uacquire(&(counter->lock));
      //print something because we are curious and to give a chance to switch process
-     if(i%1000 == 0)
-       printf(1,"Counter in %s is %d at address %x\n",pid? "Parent" : "Child", counter->cnt, counter);
+     
 
      counter->cnt++;
      urelease(&(counter->lock));
 
 }
-  
+  if(i%1000 == 0)
+       printf(1,"Counter in %s is %d at address %x\n",pid? "Parent" : "Child", counter->cnt, counter);
   if(pid)
      {
        printf(1," Final Counter in parent is %d\n",counter->cnt);
