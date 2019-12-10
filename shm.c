@@ -44,7 +44,7 @@ for (i=0; i<64; i++){
 struct proc* p = myproc();
 if(index > -1){
   // Case 1
-  mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
+  //mappages(p->pgdir, (void*)PGROUNDUP(p->sz), PGSIZE, V2P(shm_table.shm_pages[index].frame), PTE_W|PTE_U);
   shm_table.shm_pages[index].refcnt++;
   *pointer=(char *)PGROUNDUP(p->sz);
 //   p->sz += PGSIZE;
@@ -77,7 +77,6 @@ initlock(&(shm_table.lock), "SHM lock");
 acquire(&(shm_table.lock));
 for (i=0; i<64; i++){
   if(shm_table.shm_pages[i].id == id){
-    cprintf("SHM_CLOSE\n");
     shm_table.shm_pages[i].refcnt--;
     if(shm_table.shm_pages[i].refcnt == 0){
       shm_table.shm_pages[i].id =0;
