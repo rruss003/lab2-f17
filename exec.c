@@ -36,7 +36,7 @@ exec(char *path, char **argv)
     goto bad;
   if(elf.magic != ELF_MAGIC)
     goto bad;
-
+  cprintf("test 3\n");
   if((pgdir = setupkvm()) == 0)
     goto bad;
 
