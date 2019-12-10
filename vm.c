@@ -122,7 +122,6 @@ setupkvm(void)
   struct kmap *k;
 
   if((pgdir = (pde_t*)kalloc()) == 0){
-    cprintf("setupkvm 0\n");
     return 0;}
   memset(pgdir, 0, PGSIZE);
   if (P2V(PHYSTOP) > (void*)DEVSPACE)
@@ -131,7 +130,6 @@ setupkvm(void)
     if(mappages(pgdir, k->virt, k->phys_end - k->phys_start,
                 (uint)k->phys_start, k->perm) < 0) {
       freevm(pgdir);
-      cprintf("setupkvm 1\n");
       return 0;
     }
   return pgdir;
