@@ -10,7 +10,6 @@
 int
 exec(char *path, char **argv)
 {
-  cprintf("test exec start\n");
   char *s, *last;
   int i, off;
   uint argc, sz, sp, ustack[3+MAXARG+1];
@@ -27,7 +26,6 @@ exec(char *path, char **argv)
     cprintf("exec: fail\n");
     return -1;
   }
-  cprintf("test 2\n");
   ilock(ip);
   pgdir = 0;
 
@@ -36,11 +34,9 @@ exec(char *path, char **argv)
     goto bad;
   if(elf.magic != ELF_MAGIC)
     goto bad;
-  cprintf("test 3\n");
   if((pgdir = setupkvm()) == 0)
     goto bad;
 
-  cprintf("test 4\n");
   // Load program into memory.
   sz = 0;
   for(i=0, off=elf.phoff; i<elf.phnum; i++, off+=sizeof(ph)){
@@ -65,7 +61,6 @@ exec(char *path, char **argv)
 
   // Allocate two pages at the next page boundary.
   // Make the first inaccessible.  Use the second as the user stack.
-  cprintf("test Allocate two pages at the next page boundary\n");
   sz = PGROUNDUP(sz);
   if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)
     goto bad;
@@ -105,11 +100,9 @@ exec(char *path, char **argv)
   curproc->tf->esp = sp;
   switchuvm(curproc);
   freevm(oldpgdir);
-  cprintf("test commit to the user image\n");
   return 0;
 
  bad:
-  cprintf("test bad\n");
   if(pgdir)
     freevm(pgdir);
   if(ip){
